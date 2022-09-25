@@ -6,17 +6,17 @@ import (
 )
 
 type service struct {
-	assetRepository ports.AssetRepository
+	assetRepository ports.DefinanceRepository
 }
 
-func New(assetRepo ports.AssetRepository) *service {
+func New(assetRepo ports.DefinanceRepository) *service {
 	return &service{
 		assetRepository: assetRepo,
 	}
 }
 
 func (srv *service) Get(symbol string) (domain.Asset, error) {
-	asset, err := srv.assetRepository.Get(symbol)
+	asset, err := srv.assetRepository.GetAsset(symbol)
 	if err != nil {
 		//TODO: Error handlering
 		return domain.Asset{}, err
@@ -25,7 +25,7 @@ func (srv *service) Get(symbol string) (domain.Asset, error) {
 }
 
 func (srv *service) Update(asset domain.Asset) (domain.Asset, error) {
-	asset, err := srv.assetRepository.Update(asset)
+	asset, err := srv.assetRepository.UpdateAsset(asset)
 	if err != nil {
 		//TODO: Error handlering
 		return domain.Asset{}, err
@@ -34,7 +34,7 @@ func (srv *service) Update(asset domain.Asset) (domain.Asset, error) {
 }
 
 func (srv *service) Create(asset domain.Asset) (domain.Asset, error) {
-	asset, err := srv.assetRepository.Save(asset)
+	asset, err := srv.assetRepository.SaveAsset(asset)
 	if err != nil {
 		//TODO: Error handlering
 		return domain.Asset{}, err
