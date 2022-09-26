@@ -1,4 +1,4 @@
 export PORT="8080"
-export DB_URL="mongodb://localhost:27018"
+export ENVIRONMENT="development"
 go build cmd/app/main.go
 ./main
