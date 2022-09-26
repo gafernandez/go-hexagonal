@@ -36,6 +36,6 @@ func (body AssetPostRequest) BuildAsset() domain.Asset {
 	return asset
 }
 
-func BuildPostResponse(asset domain.Asset) interface{} {
+func BuildAssetResponse(asset domain.Asset) interface{} {
 	return asset
 }

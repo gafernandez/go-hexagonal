@@ -3,6 +3,9 @@ package main
 import (
 	"os"
 
+	"github.com/gafernandez/go-hexagonal/internal/core/service/asset"
+	"github.com/gafernandez/go-hexagonal/internal/infra/repositories"
+
 	"github.com/gafernandez/go-hexagonal/internal/infra/server"
 )
 
@@ -15,5 +18,12 @@ func main() {
 	if env == "" {
 		panic("PORT EMPTY")
 	}
-	server.Start(env, port)
+	repository := repositories.NewMemKVS()
+	service := asset.NewService(repository)
+	server := server.ServerFactory{
+		Eenvironment: env,
+		Port:         port,
+		AssetService: service,
+	}
+	server.Start()
 }

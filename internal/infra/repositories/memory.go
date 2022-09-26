@@ -11,6 +11,11 @@ type memkvs struct {
 	kvsAsset map[string][]byte
 }
 
+// GetAllAsset implements ports.DefinanceRepository
+func (*memkvs) GetAllAsset() ([]domain.Asset, error) {
+	panic("unimplemented")
+}
+
 func NewMemKVS() *memkvs {
 	return &memkvs{kvsAsset: map[string][]byte{}}
 }

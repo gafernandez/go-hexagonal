@@ -3,26 +3,35 @@ package server
 import (
 	"net/http"
 
+	"github.com/gafernandez/go-hexagonal/internal/core/ports"
 	"github.com/gin-gonic/gin"
 )
 
-func Start(environment string, port string) *gin.Engine {
-	engine := gin.Default()
-
-	registerRoutes(engine)
-
-	engine.Run(":" + port)
-	return engine
+type ServerFactory struct {
+	Eenvironment string
+	Port         string
+	AssetService ports.AssetServices
 }
 
-func registerRoutes(engine *gin.Engine) {
+func (s *ServerFactory) Start() {
+	handler := NewHandlerHTTP(s.AssetService)
+	engine := gin.Default()
+
+	s.registerRoutes(engine, handler)
+
+	if err := engine.Run(":" + s.Port); err != nil {
+		panic(err)
+	}
+
+}
+
+func (s *ServerFactory) registerRoutes(engine *gin.Engine, handler *HandlerHTTP) {
 	//ping
 	engine.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
 		})
 	})
-
-	//engine.POST("/asset", protocol.WrapperHTTP(protocol.Handler_post_asset))
-	//engine.GET("/asset/:symbol", protocol.WrapperHTTP(protocol.Handler_get_asset))
+	engine.POST("/asset", handler.Post)
+	engine.GET("/asset/:symbol", handler.Get)
 }

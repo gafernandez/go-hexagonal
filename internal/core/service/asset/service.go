@@ -9,7 +9,7 @@ type service struct {
 	assetRepository ports.DefinanceRepository
 }
 
-func New(assetRepo ports.DefinanceRepository) *service {
+func NewService(assetRepo ports.DefinanceRepository) *service {
 	return &service{
 		assetRepository: assetRepo,
 	}
@@ -34,7 +34,7 @@ func (srv *service) Update(asset domain.Asset) (domain.Asset, error) {
 }
 
 func (srv *service) Create(asset domain.Asset) (domain.Asset, error) {
-	asset, err := srv.assetRepository.SaveAsset(asset)
+	asset, err := srv.assetRepository.CreateAsset(asset)
 	if err != nil {
 		//TODO: Error handlering
 		return domain.Asset{}, err
