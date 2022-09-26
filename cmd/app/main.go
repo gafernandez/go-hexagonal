@@ -21,7 +21,7 @@ func main() {
 	repository := repositories.NewMemKVS()
 	service := asset.NewService(repository)
 	server := server.ServerFactory{
-		Eenvironment: env,
+		Environment:  env,
 		Port:         port,
 		AssetService: service,
 	}

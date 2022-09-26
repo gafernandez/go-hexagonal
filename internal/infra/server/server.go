@@ -8,16 +8,16 @@ import (
 )
 
 type ServerFactory struct {
-	Eenvironment string
+	Environment  string
 	Port         string
 	AssetService ports.AssetServices
 }
 
 func (s *ServerFactory) Start() {
-	handler := NewHandlerHTTP(s.AssetService)
+	assetHandler := NewAssetHandlerHTTP(s.AssetService)
 	engine := gin.Default()
 
-	s.registerRoutes(engine, handler)
+	s.registerRoutes(engine, assetHandler)
 
 	if err := engine.Run(":" + s.Port); err != nil {
 		panic(err)
@@ -25,13 +25,13 @@ func (s *ServerFactory) Start() {
 
 }
 
-func (s *ServerFactory) registerRoutes(engine *gin.Engine, handler *HandlerHTTP) {
+func (s *ServerFactory) registerRoutes(engine *gin.Engine, aHandler *AssetHandlerHTTP) {
 	//ping
 	engine.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
 		})
 	})
-	engine.POST("/asset", handler.Post)
-	engine.GET("/asset/:symbol", handler.Get)
+	engine.POST("/asset", aHandler.Post)
+	engine.GET("/asset/:symbol", aHandler.Get)
 }

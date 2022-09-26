@@ -1,6 +1,8 @@
 package asset
 
 import (
+	"time"
+
 	"github.com/gafernandez/go-hexagonal/internal/core/domain"
 	"github.com/gafernandez/go-hexagonal/internal/core/ports"
 )
@@ -34,10 +36,11 @@ func (srv *service) Update(asset domain.Asset) (domain.Asset, error) {
 }
 
 func (srv *service) Create(asset domain.Asset) (domain.Asset, error) {
-	asset, err := srv.assetRepository.CreateAsset(asset)
+	asset.LastUpdate = time.Now()
+	createdAsset, err := srv.assetRepository.CreateAsset(asset)
 	if err != nil {
 		//TODO: Error handlering
 		return domain.Asset{}, err
 	}
-	return asset, nil
+	return createdAsset, nil
 }

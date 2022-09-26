@@ -5,17 +5,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type HandlerHTTP struct {
+type AssetHandlerHTTP struct {
 	assetServices ports.AssetServices
 }
 
-func NewHandlerHTTP(service ports.AssetServices) *HandlerHTTP {
-	return &HandlerHTTP{
+func NewAssetHandlerHTTP(service ports.AssetServices) *AssetHandlerHTTP {
+	return &AssetHandlerHTTP{
 		assetServices: service,
 	}
 }
 
-func (handler *HandlerHTTP) Post(c *gin.Context) {
+func (handler *AssetHandlerHTTP) Post(c *gin.Context) {
 	body := AssetPostRequest{}
 	c.BindJSON(&body)
 
@@ -29,7 +29,7 @@ func (handler *HandlerHTTP) Post(c *gin.Context) {
 	c.JSON(201, BuildAssetResponse(result))
 }
 
-func (handler *HandlerHTTP) Get(c *gin.Context) {
+func (handler *AssetHandlerHTTP) Get(c *gin.Context) {
 	symbol := c.Param("symbol")
 	if symbol == "" {
 		c.AbortWithStatusJSON(400, gin.H{"message": "invalid symbol param"})
