@@ -18,7 +18,7 @@ func main() {
 	if env == "" {
 		panic("PORT EMPTY")
 	}
-	repository := repositories.NewMemKVS()
+	repository := repositories.NewDefinanceMemRepository()
 	service := asset.NewService(repository)
 	server := server.ServerFactory{
 		Environment:  env,

@@ -11,12 +11,7 @@ type memkvs struct {
 	kvsAsset map[string][]byte
 }
 
-// GetAllAsset implements ports.DefinanceRepository
-func (*memkvs) GetAllAsset() ([]domain.Asset, error) {
-	panic("unimplemented")
-}
-
-func NewMemKVS() *memkvs {
+func NewDefinanceMemRepository() *memkvs {
 	return &memkvs{kvsAsset: map[string][]byte{}}
 }
 
@@ -31,6 +26,16 @@ func (repo *memkvs) GetAsset(symbol string) (domain.Asset, error) {
 		return asset, nil
 	}
 	return domain.Asset{}, errors.New("Asset not found in kvs")
+}
+
+func (repo *memkvs) GetAllAsset() ([]domain.Asset, error) {
+	assets := []domain.Asset{}
+	kvsBytes, err := json.Marshal(repo.kvsAsset)
+	if err != nil {
+		return assets, errors.New("Fail to get values from kvs")
+	}
+	json.Unmarshal(kvsBytes, &assets)
+	return assets, nil
 }
 
 func (repo *memkvs) CreateAsset(asset domain.Asset) (domain.Asset, error) {

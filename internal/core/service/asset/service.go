@@ -27,6 +27,7 @@ func (srv *service) Get(symbol string) (domain.Asset, error) {
 }
 
 func (srv *service) Update(asset domain.Asset) (domain.Asset, error) {
+	asset.LastUpdate = time.Now()
 	asset, err := srv.assetRepository.UpdateAsset(asset)
 	if err != nil {
 		//TODO: Error handlering
@@ -43,4 +44,29 @@ func (srv *service) Create(asset domain.Asset) (domain.Asset, error) {
 		return domain.Asset{}, err
 	}
 	return createdAsset, nil
+}
+
+func (srv *service) GetAll() ([]domain.Asset, error) {
+	assets, err := srv.assetRepository.GetAllAsset()
+	if err != nil {
+		//TODO: error handlering
+		return []domain.Asset{}, err
+	}
+	return assets, nil
+}
+
+func (srv *service) Refresh(symbol string, source ports.DefinanceSourceServices) (domain.Asset, error) {
+	assetRepo, err := srv.assetRepository.GetAsset(symbol)
+	if err != nil {
+		return domain.Asset{}, err
+	}
+
+	assetSrc := source.FillAsset(symbol)
+	assetRepo.Price = assetSrc.Price
+	assetUpdated, err := srv.Update(assetRepo)
+	if err != nil {
+		return domain.Asset{}, err
+	}
+
+	return assetUpdated, nil
 }
