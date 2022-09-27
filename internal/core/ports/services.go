@@ -10,6 +10,6 @@ type AssetServices interface {
 	Refresh(symbol string) (domain.Asset, error)
 }
 
-type DefinanceSourceServices interface {
-	FillAsset(symbol string) domain.Asset
+type DefinanceSourcesServices interface {
+	GetPrice(symbol string, source string) (float64, error)
 }

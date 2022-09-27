@@ -3,6 +3,8 @@ package asset
 import (
 	"time"
 
+	"github.com/gafernandez/go-hexagonal/internal/infra/definancesources"
+
 	"github.com/gafernandez/go-hexagonal/internal/core/domain"
 	"github.com/gafernandez/go-hexagonal/internal/core/ports"
 )
@@ -61,9 +63,12 @@ func (srv *service) Refresh(symbol string) (domain.Asset, error) {
 		return domain.Asset{}, err
 	}
 
-	//source := ports.DefinanceSourceServices{}
-	//assetSrc := source.FillAsset(symbol)
-	assetRepo.Price = 1
+	price, err := definancesources.GetPrice(symbol, assetRepo.Source)
+	if err != nil {
+		return domain.Asset{}, err
+	}
+
+	assetRepo.Price = price
 	assetUpdated, err := srv.Update(assetRepo)
 	if err != nil {
 		return domain.Asset{}, err
