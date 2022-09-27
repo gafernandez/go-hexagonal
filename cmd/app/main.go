@@ -3,6 +3,8 @@ package main
 import (
 	"os"
 
+	"github.com/gafernandez/go-hexagonal/internal/worker"
+
 	"github.com/gafernandez/go-hexagonal/internal/core/service/asset"
 	"github.com/gafernandez/go-hexagonal/internal/infra/repositories"
 
@@ -25,5 +27,10 @@ func main() {
 		Port:         port,
 		AssetService: service,
 	}
+
+	worker := worker.NewAssetWorker(repository)
+
+	go worker.Start()
 	server.Start()
+
 }

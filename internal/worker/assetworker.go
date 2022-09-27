@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -23,9 +24,8 @@ func NewAssetWorker(repo ports.DefinanceRepository) *worker {
 	}
 }
 
-func (w *worker) Start() error {
+func (w *worker) Start() {
 	w.start60ms()
-	return nil
 }
 
 func (w *worker) start60ms() {
@@ -36,7 +36,7 @@ func (w *worker) start60ms() {
 			//TODO: Handlering error
 		}
 		for _, e := range assets {
-			if e.Worker == "60ms" {
+			if e.Worker == "60s" {
 				w.doTask(e)
 			}
 		}
@@ -45,11 +45,12 @@ func (w *worker) start60ms() {
 }
 
 func (w *worker) doTask(asset domain.Asset) {
-	//Request
-	url := "http://localhost/asset/" + asset.Symbol + "/refresh"
+	//TODO: URL Factory
+	url := "http://localhost:8080/asset/" + asset.Symbol + "/refresh"
 	var body interface{}
 	_, err := post(url, body, 10)
 	if err != nil {
+		fmt.Println("ERROR ", err)
 		//TODO: Handlering error
 	}
 }
