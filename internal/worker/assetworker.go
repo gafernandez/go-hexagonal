@@ -48,7 +48,10 @@ func (w *worker) doTask(asset domain.Asset) {
 	//Request
 	url := "http://localhost/asset/" + asset.Symbol + "/refresh"
 	var body interface{}
-	post(url, body, 10)
+	_, err := post(url, body, 10)
+	if err != nil {
+		//TODO: Handlering error
+	}
 }
 
 func post(url string, body interface{}, seconds int64) ([]byte, error) {

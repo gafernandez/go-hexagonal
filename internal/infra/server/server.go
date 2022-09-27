@@ -34,4 +34,5 @@ func (s *ServerFactory) registerRoutes(engine *gin.Engine, aHandler *AssetHandle
 	})
 	engine.POST("/asset", aHandler.Post)
 	engine.GET("/asset/:symbol", aHandler.Get)
+	engine.POST("/asset/:symbol/refresh", aHandler.Refresh)
 }

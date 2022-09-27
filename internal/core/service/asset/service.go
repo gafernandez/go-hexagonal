@@ -55,14 +55,15 @@ func (srv *service) GetAll() ([]domain.Asset, error) {
 	return assets, nil
 }
 
-func (srv *service) Refresh(symbol string, source ports.DefinanceSourceServices) (domain.Asset, error) {
+func (srv *service) Refresh(symbol string) (domain.Asset, error) {
 	assetRepo, err := srv.assetRepository.GetAsset(symbol)
 	if err != nil {
 		return domain.Asset{}, err
 	}
 
-	assetSrc := source.FillAsset(symbol)
-	assetRepo.Price = assetSrc.Price
+	//source := ports.DefinanceSourceServices{}
+	//assetSrc := source.FillAsset(symbol)
+	assetRepo.Price = 1
 	assetUpdated, err := srv.Update(assetRepo)
 	if err != nil {
 		return domain.Asset{}, err

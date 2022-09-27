@@ -44,3 +44,19 @@ func (handler *AssetHandlerHTTP) Get(c *gin.Context) {
 
 	c.JSON(200, BuildAssetResponse(asset))
 }
+
+func (handler *AssetHandlerHTTP) Refresh(c *gin.Context) {
+	symbol := c.Param("symbol")
+	if symbol == "" {
+		c.AbortWithStatusJSON(400, gin.H{"message": "invalid symbol param"})
+		return
+	}
+
+	asset, err := handler.assetServices.Refresh(symbol)
+	if err != nil {
+		c.AbortWithStatusJSON(500, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.JSON(200, BuildAssetResponse(asset))
+}
